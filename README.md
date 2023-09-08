@@ -5,6 +5,7 @@ This document contains an overview of the systems and some observations made thr
 
 ## Table of Contents <!-- omit from toc -->
 - [Systems](#systems)
+- [Armitage Communications](#armitage-communications)
 - [Log file locations](#log-file-locations)
 - [Exploit Error Messages](#exploit-error-messages)
   - [OLD Kali](#old-kali)
@@ -12,6 +13,11 @@ This document contains an overview of the systems and some observations made thr
 - [MSF Scan Error](#msf-scan-error)
     - [Normal Logs](#normal-logs)
 - [Exploit \& Scanning Results](#exploit--scanning-results)
+- [Armitage Code](#armitage-code)
+  - [Sleep](#sleep)
+  - [Java Code](#java-code)
+  - [Build Process](#build-process)
+- [Notes](#notes)
 
 
 ## Systems
@@ -40,6 +46,18 @@ This document contains an overview of the systems and some observations made thr
 * RAM - 2048
 * Windows 10
 
+## Armitage Communications 
+Armitage communicates with a Metasploit RPC server that can be hosted locally or remotely. Prof. Fu's class will always host the Metasploit instance Locally. In this way we can capture the packets between the Armitage Client and Metasploit RPC server easily. The hard part appears to be 1. Decoding the messages between Armitage and the MSF RPC server as they communicate with JSON structures encoded with the *MessagePack* encoding scheme, and 2. Capturing the right traffic as there is *a lot* of *http* traffic between Armitage and the MSF RPC server.   
+
+
+As alluded to before, the Armitage Client communicates with Metasploit using the Metasploit RPC server. There are a few sources detailing the [MSF RPC API](https://docs.rapid7.com/metasploit/rpc-api/), however they tend to lack alot of the desired detail that we may want, there is an older [PDF](https://blog.ehcgroup.io/wp-content/uploads/2017/08/metasploit-rpc-api-guide-1.pdf) with a decent amount of details, this was also downloaded for posterity or something. As the MessagePack API is used, the communcations will be encoded. This means we will need to decode it with a [WireShark plugin](https://github.com/linear-rpc/msgpack-rpc-dissector), [cli tool](https://github.com/ludocode/msgpack-tools), or [web application](https://msgpack.solder.party/). Regardless, this is a tedious task. A general outline of the communications between the Armitage and MSF RPC Server is shown below.
+
+<img src=Images/Armitage-MSF.jpg>
+
+* Simply the client makes a request to the RPC API endpoint
+* The Endpoint responds with a MessagePack encoded JSON object 
+* The Object is then parsed by Armitage and used to update the screen's display. 
+
 ## Log file locations 
 Metasploit: 
 * The logs will be located at ```~/.msf4/logs/framework.log```, if you run armitage without sudo, they will be located in the user's ```.msf``` directory. If sudo is used then they will be located in the root user's home directory (```sudo su``` then the previous path will work)
@@ -49,6 +67,8 @@ Armitage:
   * The ```<YearMonthDay>``` is in the form of concatinated number for example 9/8/23 is ```230908```
   * Example Logfile ```~/.armitage/230908/localhost/10.0.2.4/auxiliary.log```
     * ```10.0.2.4``` can be replaced with "all"
+
+The Armitage Logs are jsut a list of commands and their resulting output that are sent to the Server, if there are error or event  based logging I have not seen it.
 
 
 ## Exploit Error Messages
@@ -281,4 +301,49 @@ See the [exploit google sheet](https://docs.google.com/spreadsheets/d/15_0rrRfq3
 
 See the [MSF Scan google sheet](https://docs.google.com/spreadsheets/d/1q09IqhhHdoiVH2intBxbvQAaEAoxcz1m6NXZ3LtKM9I/edit?usp=sharing) provided for more details. The main thing to note is that the MSF scan failed 3 times out of 20 (With 4 observed errors) in the Old kali, with it failing 0 times and no observed errors in the new Kali and MSF system. I can also note that later uses of the MFS scan failed, showing poorer performance over time.
 
-See the [NMAP google Sheet](https://docs.google.com/spreadsheets/d/16HaFhDpn895UwkTSc3k9G0QJOdUyeW_SxGld3nmStmE/edit?usp=sharing) provided for more details. Mainly the NMAP scans did only failed once, this was due to system usage. 
+See the [NMAP google Sheet](https://docs.google.com/spreadsheets/d/16HaFhDpn895UwkTSc3k9G0QJOdUyeW_SxGld3nmStmE/edit?usp=sharing) provided for more details. Mainly the NMAP scans succeded but took over 40 seconds on average when the VulnServer application was running on the target. This is because NMAP attempts to connect to the system multiple times as the ```-sV``` flag signals that nmap should attempt to determine the version of the applications running on the system. Overall NMAP only failed once, this was due to system usage. 
+
+
+## Armitage Code 
+This is quite... pain inducing. The code had and still has limited comments, and is a mess of tangled dependencies with hard to read code held together by a niche scripting language the author created. That said it manages to work surprisingly well.
+
+### Sleep
+[Sleep](http://sleep.dashnine.org/) is a interpreted scripting language, It combines Pearl, and Objective-C syntax, That seem to result in a Bash and Java like syntax too. This makes one very hard to read language when there is a lack of **Comments**. The Arguments are referenced like Bash function arguments, that is they are referenced based on position, not name. Additionally you do not provide the number of expected arguments in the function definition meaining you have to trace back to the first function call for any context if no comments are left. 
+
+One of the more painful things is that when a script is loaded by an engine, the functions, and more annoyingly the global variables seem to be accessible to *all* other scripts loaded in the same context (engine) this is how Armitage combines 27 scripts ranging from 100 to 2000 lines together so that the author could glue together a few tens of thousands of Java code lines. Almost all of this code is uncomments which does not help in the debugging and understanding process . 
+
+You can find more information about sleep on it's site [http://sleep.dashnine.org/](http://sleep.dashnine.org/) or assuming it goes the same way Armitage's site went on [Internet Archive](https://web.archive.org/web/20230412064619/http://sleep.dashnine.org/) I downloaded the documentation as well which can be found in [PDFs](./PDFs/sleep21manual.pdf).
+
+
+### Java Code 
+
+This will mainly be a list of areas I though were notable at one time 
+* [https://www.gitlab.com/ChrisM09/armitage/blob/4648028ca880b387da62b4269af9029bbd206d10/armitage/src/main/java/msf/RpcConnectionImpl.java#L19-L20](https://www.gitlab.com/ChrisM09/armitage/blob/4648028ca880b387da62b4269af9029bbd206d10/armitage/src/main/java/msf/RpcConnectionImpl.java#L19-L20)
+  * This is the location that defines the execute methods used in the Sleep Code to send requests 
+    * [https://www.gitlab.com/ChrisM09/armitage/blob/4648028ca880b387da62b4269af9029bbd206d10/armitage/src/main/resources/scripts/armitage.sl#L189](https://www.gitlab.com/ChrisM09/armitage/blob/4648028ca880b387da62b4269af9029bbd206d10/armitage/src/main/resources/scripts/armitage.sl#L189)
+    * This is a class that is extended by MsgRpcImpl used in the sleep code
+* [https://www.gitlab.com/ChrisM09/armitage/blob/4648028ca880b387da62b4269af9029bbd206d10/armitage/src/main/java/armitage/ConsoleQueue.java#L139](https://www.gitlab.com/ChrisM09/armitage/blob/4648028ca880b387da62b4269af9029bbd206d10/armitage/src/main/java/armitage/ConsoleQueue.java#L139)
+  * This is where the processing of commands starts. 
+* [https://www.gitlab.com/ChrisM09/armitage/blob/4648028ca880b387da62b4269af9029bbd206d10/armitage/src/main/java/armitage/ArmitageMain.java#L275](https://www.gitlab.com/ChrisM09/armitage/blob/4648028ca880b387da62b4269af9029bbd206d10/armitage/src/main/java/armitage/ArmitageMain.java#L275)
+  * Entrypoint of the program
+  * You can see which sleep scripts will be run in this file
+
+
+There are alot of Queues used by Armitage, the most important is the [Console Queue](https://github.com/ChrisM09/armitage/blob/4648028ca880b387da62b4269af9029bbd206d10/armitage/src/main/java/armitage/ConsoleQueue.java#L13) as that seems to fire off events, and uses the many other queues defined in the project... 
+
+### Build Process 
+I use a workaround since the CLI Gradle was not working all that well. 
+
+1. Install [IntelliJ IDEA IDE](https://www.jetbrains.com/idea/download/?section=windows)
+2. Open the Armitage Project
+3. Run the Gradle Build from the IDE -- this works
+   * I had an odd amount of trouble running the packaging script which uses the CLI Gradle commands
+4. Comment out Gradle commands in the packaging script
+5. Run the Packaging Script
+6. Navigate to armitage/release/unix and you are all set
+
+
+## Notes
+In general the project can be improved with comments, and general refactoring of the code to increase readability, and improve performance (If that is possible). Mostly focused on the readability aspects and noting down what a function actually needs and does...
+
+We can also update the terminology, add additional NMap options, among other possibilities. 
