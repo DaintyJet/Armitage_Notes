@@ -71,6 +71,12 @@ Armitage:
 
 The Armitage Logs are just a list of commands and their resulting output that are sent to the Server, if there are error or event  based logging I have not seen it.
 
+An easy way to monitor the logs in real time, and run Armitage is to open another terminal and use the **tail** command in the following manner.
+```
+tail -f `~/.msf4/logs/framework.log
+```
+* this way all the logs as they are created will be printed to the terminal
+
 
 ## Exploit Error Messages
 The following are error messages that were observed from the MSF Framework during the execution of Exploits
