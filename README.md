@@ -329,7 +329,7 @@ This will mainly be a list of areas I though were notable at one time
   * You can see which sleep scripts will be run in this file
 
 
-There are alot of Queues used by Armitage, the most important is the [Console Queue](https://github.com/ChrisM09/armitage/blob/4648028ca880b387da62b4269af9029bbd206d10/armitage/src/main/java/armitage/ConsoleQueue.java#L13) as that seems to fire off events, and uses the many other queues defined in the project... 
+There are alot of Queues used by Armitage, the most important is the [Console Queue](https://www.gitlab.com/ChrisM09/armitage/blob/4648028ca880b387da62b4269af9029bbd206d10/armitage/src/main/java/armitage/ConsoleQueue.java#L13) as that seems to fire off events, and uses the many other queues defined in the project... 
 
 ### Build Process 
 I use a workaround since the CLI Gradle was not working all that well. 
