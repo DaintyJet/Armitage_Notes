@@ -68,7 +68,7 @@ Armitage:
   * Example Logfile ```~/.armitage/230908/localhost/10.0.2.4/auxiliary.log```
     * ```10.0.2.4``` can be replaced with "all"
 
-The Armitage Logs are jsut a list of commands and their resulting output that are sent to the Server, if there are error or event  based logging I have not seen it.
+The Armitage Logs are just a list of commands and their resulting output that are sent to the Server, if there are error or event  based logging I have not seen it.
 
 
 ## Exploit Error Messages
