@@ -1,7 +1,5 @@
 # Armitage Notes <!-- omit from toc -->
-These are notes I have taken when debugging the Armitage system. This was done at the request of Prof. Fu to fix some bugs he observed during his classes. 
-
-This document contains an overview of the systems and some observations made throughout. 
+These are notes I have taken when debugging the Armitage system.
 
 ## Table of Contents <!-- omit from toc -->
 - [Systems](#systems)
