@@ -75,7 +75,7 @@ An easy way to monitor the logs in real time, and run Armitage is to open anothe
 ```
 tail -f `~/.msf4/logs/framework.log
 ```
-* this way all the logs as they are created will be printed to the terminal
+* this way all the logs as they are created will be printed to the terminal as they are created
 
 
 ## Exploit Error Messages
