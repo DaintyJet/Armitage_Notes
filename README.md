@@ -18,6 +18,7 @@ This document contains an overview of the systems and some observations made thr
   - [Java Code](#java-code)
   - [Build Process](#build-process)
 - [Notes](#notes)
+- [Conclusion](#conclusion)
 
 
 ## Systems
@@ -347,3 +348,6 @@ I use a workaround since the CLI Gradle was not working all that well.
 In general the project can be improved with comments, and general refactoring of the code to increase readability, and improve performance (If that is possible). Mostly focused on the readability aspects and noting down what a function actually needs and does...
 
 We can also update the terminology, add additional NMap options, among other possibilities. 
+
+## Conclusion
+Based on the behavior of Armitage on a system with the MSF Version 6.1.35-dev vs the newer 6.3.27-dev with near zero crashes in my testing, the bugs experienced were likely due to a bug in the Metasploit RPC Server. I am unable to tell which update fixed it as there have been 69 patches between the two version. Further testing can be done to confirm this, however I am unsure at this time how I would be able to debug the MSF Framework written in Ruby (It is quite large).
