@@ -2,6 +2,9 @@
 These are notes I have taken when debugging the Armitage system. This was done at the request of Prof. Fu to fix bugs observed during his classes. 
 
 This document contains an overview of the systems and some observations made throughout. 
+These are notes I have taken when debugging the Armitage system. This was done at the request of Prof. Fu to fix bugs observed during his classes. 
+
+This document contains an overview of the systems and some observations made throughout. 
 
 ## Table of Contents <!-- omit from toc -->
 - [Systems](#systems)
@@ -75,7 +78,7 @@ An easy way to monitor the logs in real time, and run Armitage is to open anothe
 ```sh
 tail -f ~/.msf4/logs/framework.log
 ```
-* this way all the logs as they are created will be printed to the terminal
+* this way all the logs as they are created will be printed to the terminal as they are created
 
 
 ## Exploit Error Messages
