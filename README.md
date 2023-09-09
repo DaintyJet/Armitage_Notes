@@ -356,11 +356,12 @@ In general the project can be improved with comments, and general refactoring of
 
 We can also update the terminology, add additional NMap options, among other possibilities. 
 
-Armitage Old Home Page: [https://web.archive.org/web/20160306011034/http://fastandeasyhacking.com/](https://web.archive.org/web/20160306011034/http://fastandeasyhacking.com/)
-Armitage Kali HomePage: [https://www.kali.org/tools/armitage/](https://www.kali.org/tools/armitage/)
-Armitage Source Code: [https://gitlab.com/kalilinux/packages/armitage](https://gitlab.com/kalilinux/packages/armitage)
-Armitage Original Help: [https://web.archive.org/web/20160306142615/http://www.fastandeasyhacking.com/nomsfrpcd](https://web.archive.org/web/20160306142615/http://www.fastandeasyhacking.com/nomsfrpcd)
-Armitage Original About: [https://web.archive.org/web/20160305202323/http://fastandeasyhacking.com/manual](https://web.archive.org/web/20160305202323/http://fastandeasyhacking.com/manual)
+Additional Links:
+* Armitage Old Home Page - [https://web.archive.org/web/20160306011034/http://fastandeasyhacking.com/](https://web.archive.org/web/20160306011034/http://fastandeasyhacking.com/)
+* Armitage Kali HomePage - [https://www.kali.org/tools/armitage/](https://www.kali.org/tools/armitage/)
+* Armitage Source Code - [https://gitlab.com/kalilinux/packages/armitage](https://gitlab.com/kalilinux/packages/armitage)
+* Armitage Original Help - [https://web.archive.org/web/20160306142615/http://www.fastandeasyhacking.com/nomsfrpcd](https://web.archive.org/web/20160306142615/http://www.fastandeasyhacking.com/nomsfrpcd)
+* Armitage Original About - [https://web.archive.org/web/20160305202323/http://fastandeasyhacking.com/manual](https://web.archive.org/web/20160305202323/http://fastandeasyhacking.com/manual)
 
 ## Conclusion
 Based on the behavior of Armitage on a system with the MSF Version 6.1.35-dev vs the newer 6.3.27-dev with near zero crashes in my testing, the bugs experienced were likely due to a bug in the Metasploit RPC Server. I am unable to tell which update fixed it as there have been 69 patches between the two version. Further testing can be done to confirm this, however I am unsure at this time how I would be able to debug the MSF Framework written in Ruby (It is quite large).
