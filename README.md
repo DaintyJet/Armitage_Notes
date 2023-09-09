@@ -366,5 +366,17 @@ Additional Links:
 * Armitage Original Help - [https://web.archive.org/web/20160306142615/http://www.fastandeasyhacking.com/nomsfrpcd](https://web.archive.org/web/20160306142615/http://www.fastandeasyhacking.com/nomsfrpcd)
 * Armitage Original About - [https://web.archive.org/web/20160305202323/http://fastandeasyhacking.com/manual](https://web.archive.org/web/20160305202323/http://fastandeasyhacking.com/manual)
 
+
+You should set the Armitage GUI shortcut to use the following 
+```
+sh -c "pkexec sudo msfdb init && sudo armitage"
+```
+* Otherwise you will be unable to launch sudo based commands 
+* I had to enable the shell popup as the new Kali only authenticates for one of them
+
+I also used to reduce the number of times you enter the password
+```
+sudo sh -c "pkexec msfdb init && armitage"
+```
 ## Conclusion
 Based on the behavior of Armitage on a system with the MSF Version 6.1.35-dev vs the newer 6.3.27-dev with near zero crashes in my testing, the bugs experienced were likely due to a bug in the Metasploit RPC Server. I am unable to tell which update fixed it as there have been 69 patches between the two version. Further testing can be done to confirm this, however I am unsure at this time how I would be able to debug the MSF Framework written in Ruby (It is quite large).
